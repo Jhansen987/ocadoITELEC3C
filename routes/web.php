@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Models\Category;
 use App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,8 @@ Route::middleware([
 
 Route::get('category',[CategoryController::class, 'index'])->name('AllCategory');
 Route::post('insertCategory',[CategoryController::class, 'store']);
+
+Route::get('/editCategory/{id}',[CategoryController::class,'edit']);
+Route::post('editCategory/update/{id}',[CategoryController::class, 'update']);
+
+Route::get('/editCategory/delete/{id}',[CategoryController::class,'delete']);
