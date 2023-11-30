@@ -40,4 +40,6 @@ Route::post('insertCategory',[CategoryController::class, 'store']);
 Route::get('/editCategory/{id}',[CategoryController::class,'edit']);
 Route::post('editCategory/update/{id}',[CategoryController::class, 'update']);
 
-Route::get('/editCategory/delete/{id}',[CategoryController::class,'delete']);
+Route::get('/editCategory/remove/{id}',[CategoryController::class,'remove']); //soft delete
+Route::get('/category/delete/{id}',[CategoryController::class,'delete']); //permanently delete
+Route::get('/category/restore/{id}',[CategoryController::class,'restore']); //restore a category

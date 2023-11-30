@@ -9,12 +9,14 @@ use Illuminate\Support\Carbon;
 
 class CategoryController extends Controller
 {
-    //
+    //show all categories
     public function index(){
-        $categories = Category::all();
-        return view('category', compact('categories'));
+        $categories = Category::latest()->paginate(10);
+        $trashcategories = Category::onlyTrashed()->latest()->paginate(10);
+        return view('category', compact('categories','trashcategories'));
     }
 
+    //add category
     public function store(Request $request){
         
         $validated = $request->validate([
@@ -46,7 +48,7 @@ class CategoryController extends Controller
         return view('editCategory',compact('categories'));
     }
 
-
+    //update category
     public function update(Request $request,$id){
         
         $validated = $request->validate([
@@ -71,10 +73,23 @@ class CategoryController extends Controller
 
         return Redirect()->route('AllCategory')->with('success','Category Updated Successfully');
     }
-
-    public function delete(Request $request, $id){
+    
+    //soft delete
+    public function remove($id){
         $categoryData = Category::find($id);
         $categoryData->delete();
         return Redirect()->route('AllCategory')->with(['success'=>'Category Removed Successfully!']);
+    }
+
+    //permanently delete
+    public function delete($id){
+        $delete = Category::onlyTrashed()->find($id)->forceDelete();
+        return Redirect()->route('AllCategory')->with(['success'=>'Category Permanently Deleted Successfully!']);
+    }
+
+    //restore
+    public function restore($id){
+        $restore = Category::withTrashed()->find($id)->restore();
+        return Redirect()->route('AllCategory')->with(['success'=>'Category Restored Successfully!']);
     }
 }
